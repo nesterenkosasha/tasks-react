@@ -1,0 +1,101 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px;
+}
+
+.App-header {
+  background-color: rgb(142, 214, 247);
+  height: 80px;
+  padding: 20px;
+  color: white;
+}
+.Add-button{
+  position: fixed;
+  bottom: 40px;
+  right: 40px;
+  font-size: 60px;
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  background-color: white;
+  border: 2px solid gray;
+  color: gray;
+}
+
+.App-title {
+  font-size: 1.5em;
+}
+
+.App-intro {
+  font-size: large;
+}
+.Overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: block;   /*Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0; 
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+  cursor: pointer; /* Add a pointer on hover */
+}
+.Modal-window{
+  text-align: center;
+  position: absolute;
+  display: flex;
+  background-color: azure;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 500px;
+  max-width: 600px;
+  min-height: 300px;
+}
+.Wrapper-tasks{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+.input{
+  margin: 20px;
+  font-size: 24px;
+  padding: 10px;
+  border-radius: 5px;
+}
+.Task{
+  border: 1px solid grey;
+  width: 200px;
+  height: 160px;
+  margin: 20px;
+  padding: 20px;
+  text-align: center;
+  font-size: 30px;
+}
+.Task-text{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+.Hidden-btn{
+  font-size: 18px;
+  padding: 10px;
+  color: gray;
+  display: none;
+}
+.Task:hover .Hidden-btn{
+  display: block;
+}
+
+@keyframes App-logo-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
