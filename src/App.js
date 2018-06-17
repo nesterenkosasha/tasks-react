@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import Task from './Task';
 import ModalWindow from './Modal-window';
+import AlarmWindow from './Alarm-window';
 import { getTasks, deleteTasks } from './api';
+import { selectByProperty } from './utils';
 import './App.css';
 
 class App extends Component {
@@ -9,25 +11,20 @@ class App extends Component {
     super(props);
     this.state = {
       tasks: [],
-      modalWindow: false,
-      // alarms: []
+      modalWindow: false
     };
     this.handelToggleModelWindow = this.handelToggleModelWindow.bind(this);
     this.handelDeleteTaskClick = this.handelDeleteTaskClick.bind(this);
     this.handleAddNewTask = this.handleAddNewTask.bind(this);
+    this.handelChangeTaskOnExpired = this.handelChangeTaskOnExpired.bind(this);
   }
+
   async componentDidMount() {
     try {
       await getTasks()
-        .then((data) => {
-          if (data.status === 200) {
-            return data.json();
-          }
-          return data;
-        })
-        .then((res) => {
-          this.setState({ tasks: res });
-        });
+      .then((res) => {
+        this.setState({ tasks: res });
+      });
     } catch (err) {
       console.log(err);
     }
@@ -43,7 +40,19 @@ class App extends Component {
       console.log(err);
     }
   }
-
+  
+  handelChangeTaskOnExpired(id) {
+    const { tasks } = this.state
+    const updatedTasks = tasks.map((task => {
+      if(task.id === id){
+        return {...task, expired: true }
+      } else {
+        return task
+      }
+    }))
+    this.setState({ tasks: updatedTasks })
+  }
+  
   handelToggleModelWindow(value) {
     if (value === 'undefined') {
       this.setState({ modalWindow: value });
@@ -51,13 +60,14 @@ class App extends Component {
       this.setState({ modalWindow: !this.state.modalWindow });
     }
   }
-
+  
   handleAddNewTask(task) {
     this.setState({ tasks: this.state.tasks.concat(task) });
   }
-
+  
   render() {
     const { modalWindow, tasks } = this.state;
+    const expiredTasks = selectByProperty(tasks, 'expired', true)
     return (
       <div className="App">
         <header className="App-header">
@@ -69,20 +79,32 @@ class App extends Component {
               return (<Task
                 key={task.id}
                 {...task}
+                handelChangeTaskOnExpired={this.handelChangeTaskOnExpired}
                 handelDeleteTaskClick={this.handelDeleteTaskClick}
-              />);
-            })
-          }
+                />);
+              })
+            }
         </div>
         <button className="Add-button" onClick={() => this.handelToggleModelWindow()} >+</button>
         {
           modalWindow
             ? <ModalWindow handleAddNewTask={this.handleAddNewTask} handelToggleModelWindow={this.handelToggleModelWindow} />
             : null
-        }
+          }
+                {
+                  expiredTasks.length
+                  ? <AlarmWindow expiredTasks={expiredTasks} handelDeleteTaskClick={this.handelDeleteTaskClick}/>
+            : null
+          }
       </div>
     );
   }
 }
 
 export default App;
+  // .then((data) => {
+  //   if (data.status === 200) {
+  //     return data.json();
+  //   }
+  //   return data;
+  // })

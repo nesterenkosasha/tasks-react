@@ -8,25 +8,26 @@ class Timer extends Component {
     this.state = {
       time: this.props.date,
     };
-    console.log('propor', this.props);
   }
 
   componentDidMount() {
-    this.interval = null;
     this.interval = setInterval(() => {
       if (this.state.time < Date.now()) {
-        console.log('ff', this.interval);
         clearInterval(this.interval);
+        this.props.handelChangeTaskOnExpired()
       } else {
         this.setState({ time: this.state.time - 100 });
       }
     }, 1000);
   }
 
+  componentWillUnmount(){
+    clearInterval(this.interval)
+}
+
 
   render() {
     const { time } = this.state;
-    console.log(time);
     return (
       <div>{showTimer(time)}</div>
     );

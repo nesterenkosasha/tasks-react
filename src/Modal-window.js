@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { postTasks } from './api';
-import { validation } from './utils';
+import { validation, showDefaultTime } from './utils';
 import './App.css';
 
 class ModalWindow extends Component {
@@ -19,10 +19,9 @@ class ModalWindow extends Component {
     try {
       const task = this.inputTask.value;
       const date = this.inputDate.value;
-      console.log(task, date);
       e.preventDefault();
       if (validation(this.inputTask.value, this.inputDate.value)) {
-        await postTasks({ task, date: Date.parse(date) })
+        await postTasks({ task, date: Date.parse(date), 'expired': false })
           .then((data) => {
             if (data.status === 201) {
               return data.json();
@@ -30,7 +29,6 @@ class ModalWindow extends Component {
             return data;
           })
           .then((data) => {
-            console.log(data);
             this.inputTask.value = '';
             this.props.handelToggleModelWindow(false);
             this.props.handleAddNewTask(data);
@@ -48,7 +46,7 @@ class ModalWindow extends Component {
         <form onSubmit={this.handelSubmit}>
           <h1>Task</h1>
           <input type="text" ref={(inp) => { this.inputTask = inp; }} name="task" className="input" placeholder="Task.." />
-          <input type="text" ref={(inp) => { this.inputDate = inp; }} name="date" className="input" defaultValue="2018-06-16 20:20" />
+          <input type="text" ref={(inp) => { this.inputDate = inp; }} name="date" className="input" defaultValue={showDefaultTime()} />
           <br />
           <button className="input" onClick={this.handelCloseClick}>CLOSE</button>
           <button className="input">OK</button>
