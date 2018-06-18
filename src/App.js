@@ -11,7 +11,7 @@ class App extends Component {
     super(props);
     this.state = {
       tasks: [],
-      modalWindow: false
+      modalWindow: false,
     };
     this.handelToggleModelWindow = this.handelToggleModelWindow.bind(this);
     this.handelDeleteTaskClick = this.handelDeleteTaskClick.bind(this);
@@ -22,9 +22,9 @@ class App extends Component {
   async componentDidMount() {
     try {
       await getTasks()
-      .then((res) => {
-        this.setState({ tasks: res });
-      });
+        .then((res) => {
+          this.setState({ tasks: res });
+        });
     } catch (err) {
       console.log(err);
     }
@@ -40,19 +40,18 @@ class App extends Component {
       console.log(err);
     }
   }
-  
+
   handelChangeTaskOnExpired(id) {
-    const { tasks } = this.state
-    const updatedTasks = tasks.map((task => {
-      if(task.id === id){
-        return {...task, expired: true }
-      } else {
-        return task
+    const { tasks } = this.state;
+    const updatedTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, expired: true };
       }
-    }))
-    this.setState({ tasks: updatedTasks })
+      return task;
+    });
+    this.setState({ tasks: updatedTasks });
   }
-  
+
   handelToggleModelWindow(value) {
     if (value === 'undefined') {
       this.setState({ modalWindow: value });
@@ -60,14 +59,14 @@ class App extends Component {
       this.setState({ modalWindow: !this.state.modalWindow });
     }
   }
-  
+
   handleAddNewTask(task) {
     this.setState({ tasks: this.state.tasks.concat(task) });
   }
-  
+
   render() {
     const { modalWindow, tasks } = this.state;
-    const expiredTasks = selectByProperty(tasks, 'expired', true)
+    const expiredTasks = selectByProperty(tasks, 'expired', true);
     return (
       <div className="App">
         <header className="App-header">
@@ -75,36 +74,36 @@ class App extends Component {
         </header>
         <div className="Wrapper-tasks">
           {
-            tasks.map((task) => {
-              return (<Task
+            tasks.map((task) => (
+              <Task
                 key={task.id}
                 {...task}
                 handelChangeTaskOnExpired={this.handelChangeTaskOnExpired}
                 handelDeleteTaskClick={this.handelDeleteTaskClick}
-                />);
-              })
-            }
+              />
+            ))
+          }
         </div>
         <button className="Add-button" onClick={() => this.handelToggleModelWindow()} >+</button>
         {
           modalWindow
-            ? <ModalWindow handleAddNewTask={this.handleAddNewTask} handelToggleModelWindow={this.handelToggleModelWindow} />
+            ? (<ModalWindow
+              handleAddNewTask={this.handleAddNewTask}
+              handelToggleModelWindow={this.handelToggleModelWindow}
+            />)
             : null
-          }
-                {
-                  expiredTasks.length
-                  ? <AlarmWindow expiredTasks={expiredTasks} handelDeleteTaskClick={this.handelDeleteTaskClick}/>
+        }
+        {
+          expiredTasks.length
+            ? (<AlarmWindow
+              expiredTasks={expiredTasks}
+              handelDeleteTaskClick={this.handelDeleteTaskClick}
+            />)
             : null
-          }
+        }
       </div>
     );
   }
 }
 
 export default App;
-  // .then((data) => {
-  //   if (data.status === 200) {
-  //     return data.json();
-  //   }
-  //   return data;
-  // })

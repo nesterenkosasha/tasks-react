@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { postTasks } from './api';
 import { validation, showDefaultTime } from './utils';
 import './App.css';
@@ -21,7 +22,7 @@ class ModalWindow extends Component {
       const date = this.inputDate.value;
       e.preventDefault();
       if (validation(this.inputTask.value, this.inputDate.value)) {
-        await postTasks({ task, date: Date.parse(date), 'expired': false })
+        await postTasks({ task, date: Date.parse(date), expired: false })
           .then((data) => {
             if (data.status === 201) {
               return data.json();
@@ -55,5 +56,11 @@ class ModalWindow extends Component {
     );
   }
 }
+
+ModalWindow.propTypes = {
+  handelToggleModelWindow: PropTypes.func.isRequired,
+  handleAddNewTask: PropTypes.func.isRequired,
+};
+
 
 export default ModalWindow;

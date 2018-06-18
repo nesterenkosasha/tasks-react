@@ -1,8 +1,8 @@
-import { regExpText, regExpDate, currentTime, msInHour, msInMinute, msInSecond } from './constants';
+import { regExpText, regExpDate, currentTimeMs, msInHour, msInMinute, msInSecond } from './constants';
 
 export function currentMs(date) {
   const parsed = Date.parse(new Date(date));
-  const ms = parsed - currentTime;
+  const ms = parsed - currentTimeMs;
   if (ms > 0) {
     return ms;
   }
@@ -30,11 +30,12 @@ export function renderToDom(domEl, childrens) {
 
 export function selectByProperty(arr, property, value) {
   return arr.reduce((acc, obj) => {
-    if(obj.hasOwnProperty(property) === true && obj[property] === value){
-      acc = acc.concat(obj)
+    if (Object.prototype.hasOwnProperty.call(obj, property) === true && obj[property] === value) {
+      // eslint-disable-next-line
+      acc = acc.concat(obj);
     }
-    return acc
-  }, [])
+    return acc;
+  }, []);
 }
 
 
@@ -52,10 +53,10 @@ export function showTimer(date) {
 export function showDefaultTime() {
   const currentTime = new Date();
   const year = currentTime.getFullYear();
-  const month = currentTime.getMonth()+1;
+  const month = currentTime.getMonth() + 1;
   const day = currentTime.getDate();
   const hour = currentTime.getHours();
-  const min = currentTime.getMinutes()+1;
-  return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`
+  const min = currentTime.getMinutes() + 1;
+  return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')} ${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}`;
 }
 
